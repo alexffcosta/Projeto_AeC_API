@@ -10,7 +10,7 @@ using apresentacao.Servicos;
 namespace apresentacao.Controller
 {
     [ApiController]
-    [Route("[controller]")]
+    
     public class CandidatosController : ControllerBase
     {
         private readonly DbContexto _context;
@@ -21,6 +21,8 @@ namespace apresentacao.Controller
         }
 
         // GET: Candidatos
+        [HttpGet]
+        [Route("/candidatos")]
         public async Task<IActionResult> Index()
         {
             var dbContexto = _context.Candidatos.Include(c => c.Vaga);
@@ -29,6 +31,7 @@ namespace apresentacao.Controller
 
         
         [HttpPost]
+        [Route("/candidatos")]
         
         public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)
         {
@@ -56,6 +59,7 @@ namespace apresentacao.Controller
 
                 
         [HttpPut]
+        [Route("/candidatos/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)
         {
             
@@ -91,6 +95,7 @@ namespace apresentacao.Controller
         
         // POST: Candidatos/Delete/5
         [HttpDelete, ActionName("Delete")]
+        [Route("/candidatos/{id}")]
         
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
