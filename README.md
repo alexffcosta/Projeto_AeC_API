@@ -1,7 +1,7 @@
 # Comandos iniciais:
 ``` bash
-  mkdir aec-webapi-entity-framework
-  cd aec-webapi-entity-framework
+  mkdir ProjetoAeC
+  cd ProjetoAeC
   dotnet new webapi
 ```
 
