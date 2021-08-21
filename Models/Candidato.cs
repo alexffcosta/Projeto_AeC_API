@@ -19,14 +19,15 @@ namespace apresentacao.Models
     public string Nome { get;set; }
      
 
-    [Column("cpf", TypeName = "int")]
-    [MaxLength(8)]
-    public int Cpf { get;set; }
-
-    [Column("dtnascimento", TypeName = "int")]
-    [MaxLength(8)]
+    [Column("cpf", TypeName = "varchar")]
+    [MaxLength(14)]
     [Required]
-    public int Dtanascimento { get;set; }
+    public string Cpf { get;set; }
+
+    [Column("dtnascimento", TypeName = "varchar")]
+    [MaxLength(14)]
+    [Required]
+    public string Dtanascimento { get;set; }
 
     [Column ("estadocivil", TypeName = "varchar")]
     [Required]
@@ -39,18 +40,18 @@ namespace apresentacao.Models
 
     [Column("cep", TypeName = "varchar")]
     [MaxLength(10)]
-    [Required]
-    public int Cep { get;set; }
+    [Required]    
+    public string Cep { get;set; }
 
     [Column("logadouro", TypeName = "varchar")]
     [MaxLength(50)]
     [Required]    
     public string Logadouro { get;set; }
 
-    [Column("numero")]
-    [Required]
+    [Column("numero", TypeName = "varchar")]
     [MaxLength(10)]
-    public int Numero { get; set; }
+    [Required]
+    public string Numero { get; set; }
 
     [Column("bairro", TypeName = "varchar")]
     [MaxLength(50)]
@@ -68,10 +69,9 @@ namespace apresentacao.Models
     [Required]
     public string Estado { get;set; }
 
-    [Column("telcontato", TypeName = "int")]
-    [MaxLength(12)]
+    [Column("telcontato", TypeName = "varchar")]
     [Required]
-    public int telcontato { get;set; }
+    public string telcontato { get;set; }
 
     [Column("id_profissao")]
     [Required]

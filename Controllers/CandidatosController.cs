@@ -35,29 +35,28 @@ namespace apresentacao.Controller
         
         public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(candidato);
-                await _context.SaveChangesAsync();
-                return StatusCode(202, await _context.Candidatos.ToListAsync());
-            }
-            
-            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0; 
-            if(cpfExiste)
+            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0;
+            if (cpfExiste)
             {
 
-                return StatusCode(200, new { Mensagem = "CADASTRADO COM SUCESSO." });
+                return StatusCode(200, new { Mensagem = "CPF JÁ ESTÁ CADASTRADO." });
             }
-           
+
+            else if(!ModelState.IsValid)
+            {
+            _context.Add(candidato);
+            await _context.SaveChangesAsync();
+            return StatusCode(202, await _context.Candidatos.ToListAsync());
+            }
             else
             {
-                return StatusCode(406, new { Mensagem = "CPF JÁ ESTÁ CADASTRADO." });
+                return StatusCode(406, new { Mensagem = "CPF NÃO CADASTRADO" });
             }
 
-                    
+
         }
 
-                
+
         [HttpPut]
         [Route("/candidatos/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)

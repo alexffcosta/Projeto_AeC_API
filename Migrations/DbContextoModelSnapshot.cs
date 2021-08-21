@@ -44,14 +44,16 @@ namespace apresentacao.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("cidade");
 
-                    b.Property<int>("Cpf")
-                        .HasMaxLength(8)
-                        .HasColumnType("int")
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)")
                         .HasColumnName("cpf");
 
-                    b.Property<int>("Dtanascimento")
-                        .HasMaxLength(8)
-                        .HasColumnType("int")
+                    b.Property<string>("Dtanascimento")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)")
                         .HasColumnName("dtnascimento");
 
                     b.Property<string>("Email")
@@ -83,18 +85,19 @@ namespace apresentacao.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("nome");
 
-                    b.Property<int>("Numero")
+                    b.Property<string>("Numero")
+                        .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("int")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("numero");
 
                     b.Property<int>("VagaId")
                         .HasColumnType("int")
                         .HasColumnName("id_profissao");
 
-                    b.Property<int>("telcontato")
-                        .HasMaxLength(12)
-                        .HasColumnType("int")
+                    b.Property<string>("telcontato")
+                        .IsRequired()
+                        .HasColumnType("varchar")
                         .HasColumnName("telcontato");
 
                     b.HasKey("Id");

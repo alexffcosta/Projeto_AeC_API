@@ -6,7 +6,7 @@ namespace ProjetoAeC_main.Apresentacao
     {
         public string Mensagem
         {
-            get{ return "Olá sejam muito bem vindo a minha API";}
+            get{ return "dadhjahd vindo a minha API";}
         }
         public List<string> Endpoints
         {
