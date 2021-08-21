@@ -13,7 +13,7 @@ using apresentacao.Servicos;
 namespace apresentacao.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    
     public class VagasController : ControllerBase
     {
         private readonly DbContexto _context;
@@ -24,6 +24,9 @@ namespace apresentacao.Controllers
         }
 
         // GET: Vagas
+        [HttpGet]
+        [Route("/vagas")]
+
         public async Task<IActionResult> Index()
         {
             var dbContexto = _context.Vagas;
@@ -32,27 +35,66 @@ namespace apresentacao.Controllers
 
                 
         [HttpPost]
+        [Route("/vagas")]
         public async Task<IActionResult> Create([Bind("Id,Cargo")] Vaga vaga)
         {
            
+           bool cargoExiste = (await _context.Vagas.Where(v => v.Cargo == vaga.Cargo).CountAsync()) > 0; 
+           if(cargoExiste){
+                return StatusCode(406, new { Mensagem = "Este cargo já foi cadastrado" });
+           }
+
             _context.Add(vaga);
             await _context.SaveChangesAsync();
             return StatusCode(201, vaga);
                 
         }
 
-             
 
+        [HttpPut]
+        [Route("/vagas/{id}")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Cargo")] Vaga vaga)
+        {
+            if (id != vaga.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(vaga);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VagaExists(vaga.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return StatusCode(200, vaga);  
+
+        }     
+    
+      
         
-        [HttpDelete, ActionName("Delete")]
-        
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        [Route("/vagas/{id}")]
+        public async Task<IActionResult> Delete(int id)
 
         {
             var vaga = await _context.Vagas.FindAsync(id);
             _context.Vagas.Remove(vaga);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return StatusCode(204);
         }
 
         private bool VagaExists(int id)

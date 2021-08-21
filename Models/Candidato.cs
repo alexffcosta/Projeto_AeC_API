@@ -16,7 +16,7 @@ namespace apresentacao.Models
     [Column("nome", TypeName = "varchar")]
     [MaxLength(100)]
     [Required]
-    public int Nome { get;set; }
+    public string Nome { get;set; }
      
 
     [Column("cpf", TypeName = "int")]
@@ -30,12 +30,12 @@ namespace apresentacao.Models
 
     [Column ("estadocivil", TypeName = "varchar")]
     [Required]
-    public int Estadocivil { get;set; }
+    public string Estadocivil { get;set; }
     
     [Column("email")]
     [MaxLength(100)]
     [Required]
-    public int Email { get; set; }
+    public string Email { get; set; }
 
     [Column("cep", TypeName = "varchar")]
     [MaxLength(10)]
@@ -73,16 +73,11 @@ namespace apresentacao.Models
     [Required]
     public int telcontato { get;set; }
 
-    [Column("nomecontato", TypeName = "varchar")]
-    [MaxLength(20)]
-    [Required]
-    public int Nomecontato { get;set; }
-
     [Column("id_profissao")]
     [Required]
     [ForeignKey ("vaga_id")]
     [JsonPropertyName("id_profissao")]
-    public int ProfissaoId { get;set; }
+    public int VagaId { get;set; }
 
     [JsonIgnore]
     public Vaga Vaga { get; set; }

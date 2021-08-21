@@ -14,7 +14,9 @@ namespace ProjetoAeC_main.Apresentacao
             { 
                 return new List<string>() 
              {
-                "/vagas"
+                "/vagas",
+                "/candidatos",
+                "/swagger"
              };
             
             }

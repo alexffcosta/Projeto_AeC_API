@@ -28,8 +28,8 @@ namespace apresentacao.Migrations
                     nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     cpf = table.Column<int>(type: "int", maxLength: 8, nullable: false),
                     dtnascimento = table.Column<int>(type: "int", maxLength: 8, nullable: false),
-                    estadocivil = table.Column<string>(type: "varchar(64)", nullable: false),
-                    email = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    estadocivil = table.Column<string>(type: "varchar", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     cep = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false),
                     logadouro = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     numero = table.Column<int>(type: "int", maxLength: 10, nullable: false),
@@ -37,25 +37,23 @@ namespace apresentacao.Migrations
                     cidade = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     estado = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false),
                     telcontato = table.Column<int>(type: "int", maxLength: 12, nullable: false),
-                    nomecontato = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
-                    id_profissao = table.Column<int>(type: "int", nullable: false),
-                    VagaId = table.Column<int>(type: "int", nullable: true)
+                    id_profissao = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_candidatos", x => x.id);
                     table.ForeignKey(
-                        name: "FK_candidatos_vagas_VagaId",
-                        column: x => x.VagaId,
+                        name: "FK_candidatos_vagas_id_profissao",
+                        column: x => x.id_profissao,
                         principalTable: "vagas",
                         principalColumn: "vaga_id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_candidatos_VagaId",
+                name: "IX_candidatos_id_profissao",
                 table: "candidatos",
-                column: "VagaId");
+                column: "id_profissao");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
