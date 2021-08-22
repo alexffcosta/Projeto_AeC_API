@@ -10,7 +10,8 @@ using apresentacao.Servicos;
 
 namespace apresentacao.Controllers
 {
-    public class VagasController : Controller
+    [ApiController]
+    public class VagasController : ControllerBase
     {
         private readonly DbContexto _context;
 
@@ -20,72 +21,42 @@ namespace apresentacao.Controllers
         }
 
         // GET: Vagas
+        [HttpGet]
+        [Route("/vagas")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vagas.ToListAsync());
+            var dbContexto = _context.Vagas;
+            return StatusCode(200, await dbContexto.ToListAsync());
         }
 
-        // GET: Vagas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        
 
-            var vaga = await _context.Vagas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vaga == null)
-            {
-                return NotFound();
-            }
 
-            return View(vaga);
-        }
-
-        // GET: Vagas/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Vagas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Route("/vagas")]
         public async Task<IActionResult> Create([Bind("Id,Cargo")] Vaga vaga)
         {
-            if (ModelState.IsValid)
+            bool cargoExiste = (await _context.Vagas.Where(v => v.Cargo == vaga.Cargo).CountAsync()) > 0; 
+           if(cargoExiste)
+           {
+                return StatusCode(406, new { Mensagem = "Este cargo já foi cadastrado" });
+           }
+            else if (ModelState.IsValid)
             {
                 _context.Add(vaga);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return StatusCode(201, vaga);
             }
-            return View(vaga);
+            else
+            {
+                return StatusCode(406);
+            }
+            
         }
 
-        // GET: Vagas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vaga = await _context.Vagas.FindAsync(id);
-            if (vaga == null)
-            {
-                return NotFound();
-            }
-            return View(vaga);
-        }
-
-        // POST: Vagas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+       
+        [HttpPut]
+        [Route("/vagas/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Cargo")] Vaga vaga)
         {
             if (id != vaga.Id)
@@ -111,32 +82,15 @@ namespace apresentacao.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                
             }
-            return View(vaga);
+            return StatusCode(406, vaga);
         }
 
-        // GET: Vagas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vaga = await _context.Vagas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vaga == null)
-            {
-                return NotFound();
-            }
-
-            return View(vaga);
-        }
-
-        // POST: Vagas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+                
+        [HttpDelete]
+        [Route("/vagas/{id}")]
+        
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vaga = await _context.Vagas.FindAsync(id);
