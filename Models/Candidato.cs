@@ -13,7 +13,7 @@ namespace apresentacao.Models
     [Column ("id")]
     public int Id { get;set; }
 
-    [Column("nome", TypeName = "varchar")]
+    [Column("nome", TypeName = "nvarchar")]
     [MaxLength(100)]
     [Required]
     public string Nome { get;set; }
@@ -24,59 +24,56 @@ namespace apresentacao.Models
     [Required]
     public string Cpf { get;set; }
 
-    [Column("dtnascimento", TypeName = "varchar")]
-    [MaxLength(14)]
+    [Column("dtnascimento", TypeName = "nvarchar")]
+    [MaxLength(10)]
     [Required]
     public string Dtanascimento { get;set; }
 
-    [Column ("estadocivil", TypeName = "varchar")]
-    [Required]
-    public string Estadocivil { get;set; }
-    
-    [Column("email")]
-    [MaxLength(100)]
+      
+    [Column("email" , TypeName = "nvarchar")]
+    [MaxLength(50)]
     [Required]
     public string Email { get; set; }
 
-    [Column("cep", TypeName = "varchar")]
-    [MaxLength(10)]
+    [Column("cep", TypeName = "nvarchar")]
+    [MaxLength(9)]
     [Required]    
     public string Cep { get;set; }
 
-    [Column("logadouro", TypeName = "varchar")]
-    [MaxLength(50)]
+    [Column("logradouro", TypeName = "nvarchar")]
+    [MaxLength(100)]
     [Required]    
     public string Logadouro { get;set; }
 
-    [Column("numero", TypeName = "varchar")]
+    [Column("numero", TypeName = "nvarchar")]
     [MaxLength(10)]
     [Required]
     public string Numero { get; set; }
 
-    [Column("bairro", TypeName = "varchar")]
-    [MaxLength(50)]
+    [Column("bairro", TypeName = "nvarchar")]
+    [MaxLength(150)]
     [Required]
     public string Bairro { get; set; }
 
-    [Column("cidade", TypeName = "varchar")]
+    [Column("cidade", TypeName = "nvarchar")]
     [MaxLength(50)]
     [Required]
     public string Cidade { get;set; }
 
     
-    [Column("estado", TypeName = "varchar")]
+    [Column("estado", TypeName = "nvarchar")]
     [MaxLength(10)]
     [Required]
     public string Estado { get;set; }
 
-    [Column("telcontato", TypeName = "varchar")]
+    [Column("telefone", TypeName = "nvarchar")]
+    [MaxLength(15)]
     [Required]
-    public string telcontato { get;set; }
+    public string Telefone { get;set; }
 
     [Column("id_profissao")]
-    [Required]
     [ForeignKey ("vaga_id")]
-    [JsonPropertyName("id_profissao")]
+    [Required]
     public int VagaId { get;set; }
 
     [JsonIgnore]

@@ -9,8 +9,8 @@ using apresentacao.Servicos;
 namespace apresentacao.Migrations
 {
     [DbContext(typeof(DbContexto))]
-    [Migration("20210821173816_CanAdd")]
-    partial class CanAdd
+    [Migration("20210822031401_CandidatoAdd")]
+    partial class CandidatoAdd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,20 +30,20 @@ namespace apresentacao.Migrations
 
                     b.Property<string>("Bairro")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("bairro");
 
                     b.Property<string>("Cep")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)")
                         .HasColumnName("cep");
 
                     b.Property<string>("Cidade")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("cidade");
 
                     b.Property<string>("Cpf")
@@ -54,53 +54,49 @@ namespace apresentacao.Migrations
 
                     b.Property<string>("Dtanascimento")
                         .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("dtnascimento");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("email");
 
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("estado");
-
-                    b.Property<string>("Estadocivil")
-                        .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasColumnName("estadocivil");
 
                     b.Property<string>("Logadouro")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("logadouro");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("logradouro");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("nome");
 
                     b.Property<string>("Numero")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("numero");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)")
+                        .HasColumnName("telefone");
 
                     b.Property<int>("VagaId")
                         .HasColumnType("int")
                         .HasColumnName("id_profissao");
-
-                    b.Property<string>("telcontato")
-                        .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasColumnName("telcontato");
 
                     b.HasKey("Id");
 

@@ -19,7 +19,7 @@ namespace apresentacao.Models
     [Column("vaga_id")]
     public int Id { get;set; }
 
-    [Column("cargo", TypeName = "varchar")]
+    [Column("cargo", TypeName = "nvarchar")]
     [MaxLength(50)]
     [Required]
     public string Cargo { get;set; }

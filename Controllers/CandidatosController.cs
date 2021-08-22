@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using apresentacao.Models;
 using apresentacao.Servicos;
 
-namespace apresentacao.Controller
+namespace apresentacao.Controllers
 {
     [ApiController]
-    
     public class CandidatosController : ControllerBase
     {
         private readonly DbContexto _context;
@@ -30,38 +30,29 @@ namespace apresentacao.Controller
         }
 
         
-        [HttpPost]
-        [Route("/candidatos")]
         
-        public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)
+        
+        [HttpPost]
+        [Route("/candidatos/{id}")]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Dtanascimento,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,Telefone,VagaId")] Candidato candidato)
         {
-            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0;
-            if (cpfExiste)
+            if (ModelState.IsValid)
             {
-
-                return StatusCode(200, new { Mensagem = "CPF JÁ ESTÁ CADASTRADO." });
-            }
-
-            else if(!ModelState.IsValid)
-            {
-            _context.Add(candidato);
-            await _context.SaveChangesAsync();
-            return StatusCode(202, await _context.Candidatos.ToListAsync());
+                _context.Add(candidato);
+                await _context.SaveChangesAsync();
+                return StatusCode(200, nameof(Index));
             }
             else
             {
-                return StatusCode(406, new { Mensagem = "CPF NÃO CADASTRADO" });
+                return StatusCode(406);
             }
-
-
         }
 
-
+        
         [HttpPut]
-        [Route("/candidatos/{id}")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cpf,Dtanascimento,Estadocivil,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,telcontato,VagaId")] Candidato candidato)
+        [Route("/vagas/{id}")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cpf,Dtanascimento,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,Telefone,VagaId")] Candidato candidato)
         {
-            
             if (id != candidato.Id)
             {
                 return NotFound();
@@ -87,21 +78,18 @@ namespace apresentacao.Controller
                 }
                 
             }
-            return StatusCode(200, candidato); 
+            return StatusCode(200, candidato);
         }
-    
 
-        
-        // POST: Candidatos/Delete/5
-        [HttpDelete, ActionName("Delete")]
-        [Route("/candidatos/{id}")]
-        
+                
+        [HttpDelete]
+        [Route("/vagas/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var candidato = await _context.Candidatos.FindAsync(id);
             _context.Candidatos.Remove(candidato);
             await _context.SaveChangesAsync();
-            return StatusCode(200, candidato); 
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CandidatoExists(int id)
@@ -110,5 +98,3 @@ namespace apresentacao.Controller
         }
     }
 }
-    
-
