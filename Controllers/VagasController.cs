@@ -36,12 +36,7 @@ namespace apresentacao.Controllers
         [Route("/vagas")]
         public async Task<IActionResult> Create([Bind("Id,Cargo")] Vaga vaga)
         {
-            bool cargoExiste = (await _context.Vagas.Where(v => v.Cargo == vaga.Cargo).CountAsync()) > 0; 
-           if(cargoExiste)
-           {
-                return StatusCode(406, new { Mensagem = "Este cargo já foi cadastrado" });
-           }
-            else if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(vaga);
                 await _context.SaveChangesAsync();

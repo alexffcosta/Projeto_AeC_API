@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using apresentacao.Models;
 using apresentacao.Servicos;
+using Microsoft.Data.SqlClient;
+
 
 namespace apresentacao.Controllers
 {
+     // [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CandidatosController : ControllerBase
     {
         private readonly DbContexto _context;
@@ -20,22 +23,71 @@ namespace apresentacao.Controllers
             _context = context;
         }
 
-        // GET: Candidatos
+        // GET: api/Candidatos
         [HttpGet]
-        [Route("/candidatos")]
-        public async Task<IActionResult> Index()
+        public async Task<ActionResult<IEnumerable<Candidato>>> GetCandidatos()
         {
-            var dbContexto = _context.Candidatos.Include(c => c.Vaga);
-            return StatusCode(200, await dbContexto.ToListAsync());
+            return await _context.Candidatos.ToListAsync();         
         }
 
-        
-        
-        
-        [HttpPost]
-        [Route("/candidatos/{id}")]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Cpf,Dtanascimento,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,Telefone,VagaId")] Candidato candidato)
+        // GET: api/Candidatos/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Candidato>> GetCandidato(int id)
         {
+            var candidato = await _context.Candidatos.FindAsync(id);
+
+            if (candidato == null)
+            {
+                return NotFound();
+            }
+
+            return candidato;
+        }
+
+        // PUT: api/Candidatos/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCandidato(int id, Candidato candidato)
+        {
+            if (id != candidato.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(candidato).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CandidatoExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            } catch (SqlException)
+            {    
+                return NoContent();
+
+            } catch (DbUpdateException)
+            {
+                return NoContent();
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Candidatos
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Candidato>> Candidato(Candidato candidato)
+        {
+            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0; 
             if (ModelState.IsValid)
             {
                 _context.Add(candidato);
@@ -47,49 +99,27 @@ namespace apresentacao.Controllers
                 return StatusCode(406);
             }
         }
-
         
-        [HttpPut]
-        [Route("/vagas/{id}")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cpf,Dtanascimento,Email,Cep,Logadouro,Numero,Bairro,Cidade,Estado,Telefone,VagaId")] Candidato candidato)
+
+        private ActionResult<Candidato> TextResult(string v)
         {
-            if (id != candidato.Id)
+            throw new NotImplementedException();
+        }
+
+        // DELETE: api/Candidatos/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCandidato(int id)
+        {
+            var candidato = await _context.Candidatos.FindAsync(id);
+            if (candidato == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(candidato);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CandidatoExists(candidato.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                
-            }
-            return StatusCode(200, candidato);
-        }
-
-                
-        [HttpDelete]
-        [Route("/vagas/{id}")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var candidato = await _context.Candidatos.FindAsync(id);
             _context.Candidatos.Remove(candidato);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool CandidatoExists(int id)
