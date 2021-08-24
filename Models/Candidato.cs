@@ -27,7 +27,7 @@ namespace apresentacao.Models
     [Column("dtnascimento", TypeName = "nvarchar")]
     [MaxLength(10)]
     [Required]
-    public string Dtanascimento { get;set; }
+    public string Dtnascimento { get;set; }
 
       
     [Column("email" , TypeName = "nvarchar")]
@@ -43,7 +43,7 @@ namespace apresentacao.Models
     [Column("logradouro", TypeName = "nvarchar")]
     [MaxLength(100)]
     [Required]    
-    public string Logadouro { get;set; }
+    public string Logradouro { get;set; }
 
     [Column("numero", TypeName = "nvarchar")]
     [MaxLength(10)]

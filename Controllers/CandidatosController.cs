@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using apresentacao.Models;
 using apresentacao.Servicos;
 using Microsoft.Data.SqlClient;
-
+using Microsoft.Extensions.DependencyInjection;
 
 namespace apresentacao.Controllers
 {
      // [Route("api/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
     public class CandidatosController : ControllerBase
     {
         private readonly DbContexto _context;
@@ -25,13 +24,15 @@ namespace apresentacao.Controllers
 
         // GET: api/Candidatos
         [HttpGet]
+        [Route("/candidatos")]
         public async Task<ActionResult<IEnumerable<Candidato>>> GetCandidatos()
         {
             return await _context.Candidatos.ToListAsync();         
         }
 
         // GET: api/Candidatos/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("/candidatos/{id}")]
         public async Task<ActionResult<Candidato>> GetCandidato(int id)
         {
             var candidato = await _context.Candidatos.FindAsync(id);
@@ -46,7 +47,9 @@ namespace apresentacao.Controllers
 
         // PUT: api/Candidatos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("/candidatos/{id}")]
+
         public async Task<IActionResult> PutCandidato(int id, Candidato candidato)
         {
             if (id != candidato.Id)
@@ -85,20 +88,26 @@ namespace apresentacao.Controllers
         // POST: api/Candidatos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Candidato>> Candidato(Candidato candidato)
+        [Route("/candidatos")]
+        public async Task<ActionResult<Candidato>> Candidato([FromBody] Candidato candidato)
         {
-            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0; 
-            if (ModelState.IsValid)
+            bool cpfExiste = (await _context.Candidatos.Where(v => v.Cpf == candidato.Cpf).CountAsync()) > 0;
+            if (cpfExiste)
             {
-                _context.Add(candidato);
-                await _context.SaveChangesAsync();
-                return StatusCode(200, nameof(Index));
+                return StatusCode(200, new { Mensagem = "CPF JÁ ESTÁ CADASTRADO." });
+            }
+            else if(ModelState.IsValid)
+            {
+            _context.Add(candidato);
+            await _context.SaveChangesAsync();
+            return StatusCode(202, await _context.Candidatos.ToListAsync());
             }
             else
             {
-                return StatusCode(406);
+                return StatusCode(406, new { Mensagem = "CPF NÃO CADASTRADO" });
             }
         }
+        
         
 
         private ActionResult<Candidato> TextResult(string v)
@@ -107,7 +116,8 @@ namespace apresentacao.Controllers
         }
 
         // DELETE: api/Candidatos/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("/candidatos/{id}")]
         public async Task<IActionResult> DeleteCandidato(int id)
         {
             var candidato = await _context.Candidatos.FindAsync(id);

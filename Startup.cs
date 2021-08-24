@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using apresentacao.Models;
 using apresentacao.Servicos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace apresentacao
 {
@@ -38,6 +39,20 @@ namespace apresentacao
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "apresentacao", Version = "v1" });
             });
+
+            services.AddMvc(options =>
+            {
+                options.AllowEmptyInputInBodyModelBinding = true;
+                foreach (var formatter in options.InputFormatters)
+                {
+                    if (formatter.GetType() == typeof(SystemTextJsonInputFormatter))
+                    ((SystemTextJsonInputFormatter)formatter).SupportedMediaTypes.Add(
+                    Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("text/plain"));
+                }
+            }).AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +67,12 @@ namespace apresentacao
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+                 .AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader()
+            );
 
             app.UseAuthorization();
 
