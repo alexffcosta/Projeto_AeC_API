@@ -69,9 +69,9 @@ namespace apresentacao
             app.UseRouting();
 
             app.UseCors(x => x
-                 .AllowAnyOrigin()
-                 .AllowAnyMethod()
-                 .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
             );
 
             app.UseAuthorization();
